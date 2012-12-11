@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Udacity - 21st Century University</title>
+<meta name="google-site-verification" content="8BozdrktZ5uY63LYrPxB5iOkouVTdHipGsNzUW9V2pU" />
+<link rel="stylesheet" type="text/css" href="/media/css/udacity2.css?155" />
+<link rel="stylesheet" type="text/css" href="/media/css/dialogs.css?155"/>
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    button, .button, a.button, ol.nugget-list {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+<!--
+<script
+    src="//www.google.com/jsapi?key=ABQIAAAAOx-pTXyuaUsotjKevTem5RRY-J96ZG6vUeHysYWcYheHIRtZ7hQ7CQ5yRTKcwjX2z4sBOrajFOZMkA"></script>
+-->
+<script type="text/javascript">
+    if (!window.console) {
+       window.console = {
+          log : function(){},
+          debug : function(){},
+          info : function(){},
+          warn : function(){}
+       }
+    }
+    window.udacityJSVersion = 155;
+</script>
+<!-- 
+<script type="text/javascript">
+    google.load("jquery", "1.7.1", {uncompressed:true});
+    google.load("jqueryui", "1.8.16");
+</script>
+ -->
+<script src="/media/js/libs/jquery/jquery-1-7-2-min.js?155"></script>
+<script src="/media/js/libs/jquery/jquery-ui-1-8-16-min.js?155"></script>
+<script src="/media/js/jquery.form.js?155"></script>
+<script src="/media/js/jquery.history.js?155"></script>
+<script src="/media/js/json2.js?155"></script>
+<script src="/media/js/udacity.js?155"></script>
+<script src="/media/js/pages.js?155"></script>
+<script src="/media/js/social_apis.js?155"></script>
+
+
+<!-- Ember includes -->
+<script type="text/javascript">
+if ($.browser.msie && 1*$.browser.version < 9.0) {
+	document.write('<script src="/media/js/ember-0.9.6.min.js?155"><'+'/script>' );
+	console.log($.browser);
+	$.each($.browser,function(i,val){
+		console.log(i);
+		console.log(val);
+	});
+}
+else{
+    document.write('<script src="/media/js/ember-0.9.6.min.js?155"><'+'/script>');
+}
+</script>
+<script src="/media/js/models.js?155" type="text/javascript"></script>
+<script src="/media/js/ember/apps/notifications.js?155"></script>
+<script src="/media/js/bangvars.js?155" type="text/javascript"></script>
+
+<script type="text/javascript">
+  csrf_token = "q9VfC39ibMszTGdVfENDJm8hpdX383s4X2GX2yp8Kmd5QvhvGZfEZv7kefvq"
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28524234-1']);
+  _gaq.push(['_setCustomVar',1,'isUdacityRegistered','No', 1]);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+$(document).ready(function() {
+    // use js to position botbar at either end of document or bottom of window, whichever is lower
+    var windowHeight = $(window).height();   // returns height of browser viewport
+    var contentHeight = $("body").height(); // returns height of HTML document
+    var footerHeight = $("div#bottom_bin").height();
+    var footerTop = windowHeight - footerHeight - 50;
+    if (windowHeight > contentHeight) {
+        //$("div#bottom_bin").css("top",footerTop);
+    }
+
+
+    if(window.location.hash && window.location.hash.length > 0) {
+      UY.ajaxGET('account.is_enrolled_in_path',{path: window.location.hash.slice(1)},function(data){
+        _gaq.push(['_setCustomVar',2,'isEnrolledInCourse', (data.result) ? 'Yes' : 'No',3]);
+        _gaq.push(['_trackPageview',UY.getHashConvertedUrl(true)]);
+        isEnrolledInCourse = data.result;
+      });
+    } else {
+      _gaq.push(['_trackPageview',UY.getHashConvertedUrl(true)]);      
+    }
+});
+
+
+//Notifications
+$(document).ready(function(){
+    //Note.NotificationManager.getNotes(UY.BangVars.getHash(true));
+});
+
+</script>
+<script type="text/x-handlebars" data-template-name="notification-view">
+<div class="notification width960">
+    <div {{bindAttr class="importance"}}>
+        <div class="notification-icon">&nbsp;</div>
+        <div class="notification-content">{{{notification.content}}}</div>
+        <div class="dismissbox" {{action "dismissNotification" on="click" }}>x</div> 
+        <div class="clear"></div>
+    </div>
+</div>
+</script>
+
+</head>
+<body>
+    <div id="not-footer">
+        
+
+
+
+
+
+<div id="top_bin">
+	<div id="top_content" class="width960">
+		<!-- logo -->
+		<div class="udacity float-left">
+			<a href="/"><img id="top-logo" src="/media/img/logos/Udacity_internal_logo.png" alt="Udacity" /></a><span id="top-course-title">&nbsp;</span>
+		</div>
+		<!-- buttons -->
+		<div class="user-block">
+			<!-- SIGN IN BUTTON & NO OVERLAY -->
+			<div id="signin-topbar-button" class="topbar-modal-button float-right">
+				<span>Sign In</span>
+			</div>
+			<div class="top-bar-separator float-right"></div>
+			<!-- SIGN UP BUTTON & NO OVERLAY -->
+			<div id="signup-topbar-button" class="topbar-modal-button float-right">
+				<span>Sign Up</span>
+			</div>
+			<!-- SEPARATOR -->
+			<div class="top-bar-separator float-right"></div>
+			<!-- CLASS LIST BUTTON & OVERLAY -->
+		   <div id="courses-topbar-button" class="topbar-modal-button float-right">
+			   <span class="downward-link">Classes</span>
+			</div>
+			<div id="courses-topbar-button-overlay" class="overlay">
+				<div class="topbar-menu  topbar-course-menu">
+					Loading courses...
+					<img src="/media/img/ajax-loader.gif" width=16 height=16 style="margin: 4px; vertical-align: middle;">
+				</div>
+				<div class="topbar-bottom-button">
+				   <a href="/courses" class="button forward-button">See All Upcoming Classes</a>
+				</div>
+			</div>
+			
+			
+				
+
+
+		</div><!-- end user-block -->
+		<div class="header-title">
+			<h2></h2>
+		</div>
+		<div class="header-text clear">
+		
+		</div>
+
+		<!-- header nav function starts here -->
+		
+<div id="header-nav" style="display: none;">
+	<script type="text/x-handlebars">
+
+<ul class="topnav">
+	{{#if UY.HeaderNavApp.enabled}}
+  	    {{#unless UY.HeaderNavApp.headerLinks.enabled}}
+	        {{#each UY.HeaderNavApp.headerLinks.content}}
+		        <li class="topnav inactive">
+				    <span class="inactive">{{label}}</span>
+        	    </li>
+    	    {{/each}}
+	    {{else}}
+	        {{#each UY.HeaderNavApp.headerLinks.content}}
+			    {{#if current}}
+				    <li class="topnav selected">
+				    <a>{{label}}</a>
+			    {{else}}
+		            {{#if active}}
+   			             <li class="topnav">
+		                <a {{bindAttr href="link"}}>{{label}}</a>
+		            {{else}}                    
+		                <li class="topnav inactive">
+		                <span class="inactive">{{label}}</span>
+		            {{/if}}
+			    {{/if}}
+        	    </li>
+    	    {{/each}}
+	    {{/unless}}
+	{{/if}}
+</ul>
+<div class="clear"></div>
+</script>
+</div>
+
+		<!-- header nav function ends here -->
+
+	</div><!-- end top_content -->
+	<div class="clear"></div>
+
+<div id="javascript_warning">
+	<img src="/media/img/icons/alert.gif" style="vertical-align: middle;" />
+	<span>This website requires JavaScript to be enabled. Please make sure JavaScript is enabled in your web browser preferences and any JavaScript blockers are disabled for this site.</span>
+</div>
+<script type="text/javascript">
+	var el = document.getElementById('javascript_warning');
+	el.style.display = "none";
+</script>
+</div><!-- end top_bin -->
+
+        <div class="" id="notification-ember-anchor">
+	        <script type="text/x-handlebars">
+                {{#each Note.NotificationManager.content}}
+                    <div>
+                      {{view Note.NotificationView notificationBinding="this"}}
+                    </div>
+               {{/each}}
+           </script>
+           
+        </div>
+        <div id="content-background">
+            <div id="content" class="width960">            
+               
+<link rel="stylesheet" type="text/css" href="/media/wiki/style.css?155"/>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+ "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] },
+ tex2jax: { inlineMath: [ ["$%","$%"] ],
+            displayMath: [ ["$$","$$"] ],
+            processEscapes: true,
+            ignoreClass: "tex2jax_ignore|dno"
+ },
+ TeX: { noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } } },
+ messageStyle: "none"
+});
+</script>
+<script>
+(function() {
+	var mj = document.createElement('script'); mj.type = 'text/javascript'; mj.async = true;
+	mj.id = 'mathjax-script-tag';
+	mj.src = '/media/mathjax/MathJax.js?config=TeX-AMS_HTML';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mj, s);
+})();
+</script>
+<script>window.Handlebars || document.write('<script src="/media/js/ember-0.9.4.min.js"><\/script>')</script>
+<script>
+(function() {
+	var course = new RegExp('course=([^&]*)').exec(window.location.search);
+	course = course && unescape(course[1]) || ''; 
+	if (!course.match(/^\w+$/i)) {
+		UY.BangVars.getHash = function() { return ''; }
+		UY.ajaxGET = function() { }
+	} 
+	else {
+		$("#top-course-title").text(course);
+		// TODO Clean this up plz
+		var rev = '1';
+		if(course === 'cs101' || course === 'cs212' || course === 'cs253' || course === 'cs262' || course === 'cs373' || course === 'cs387') {
+			rev = 'apr2012';
+		}
+		UY.BangVars.getHash = function() { return 'Course/' + course + '/CourseRev/' + rev + '/Unit/1/Nugget/1'; }
+		$(function() {
+			$("#header-nav").show();
+			$('#wiki-content-container a').each(function(i, e) {
+				if (e.pathname.indexOf('/wiki') < 0 || e.search.indexOf('course=') >= 0) { return; }
+				if (e.search == '') { e.search = 'course=' + course; }
+				else { e.search += '&course=' + course; }
+			});
+		});	
+	}
+})();
+</script>
+<script src="/media/js/header_nav.js?155"></script>
+
+
+
+<div id="wiki-content-container">
+
+
+<link href="/media/wiki/google-code-prettify/prettify.css?155" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="/media/wiki/google-code-prettify/prettify.js?155"></script>
+<script>
+$(document).ready(function() {
+    prettyPrint();
+})
+</script>
+<script type="text/javascript" src="/media/wiki/jquery.highlight.js?155"></script>
+<script>
+$(document).ready(function() {
+    var rx = /highlight=([^&]+)/;
+    var match = rx.exec(window.location.search);
+    if (match) {
+        $('#pb').highlight(decodeURIComponent(match[1]));
+    }
+})
+</script>
+
+<ul id="tabs" class="locked">
+  <li class="active"><a class="view" href="/wiki/CS101_Homework_1">View</a></li>
+  <li><a href="/wiki/w/history?page=CS101_Homework_1">History</a></li>
+</ul>
+<div class="wtabs extl" id="pb">
+      <h1 id="cs101-unit-1-homework">CS101 - Unit 1 Homework</h1>
+
+<h2 id="question-1-search-engines-and-the-web">Question 1 - Search Engines and the Web</h2>
+
+<h3 id="sample-web-page">Sample Web Page</h3>
+
+<pre><code class="prettyprint">&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;&lt;br/&gt; &lt;head&gt;&lt;br/&gt;&lt;title&gt;Udacity&lt;/title&gt; &lt;br/&gt;&lt;/head&gt;&lt;br/&gt;&lt;br/&gt;&lt;body&gt; &lt;br/&gt;&lt;h1&gt;Udacity&lt;/h1&gt;&lt;br/&gt;&lt;br/&gt; &lt;p&gt;&lt;b&gt;Udacity&lt;/b&gt; is a private institution of &lt;a href="http://www.wikipedia.org/wiki/Higher_education"&gt; higher education founded by&lt;/a&gt; &lt;a href="http://www.wikipedia.org/wiki/Sebastian_Thrun"&gt;Sebastian Thrun&lt;/a&gt;, David Stavens, and Mike Sokolsky with the goal to provide university-level education that is "both high quality and low cost".&lt;br/&gt;It is the outgrowth of a free computer science class offered in 2011 through Stanford University. Currently, Udacity is working on its second course on building a search engine. Udacity was announced at the 2012 &lt;a href="http://www.wikipedia.org/wiki/Digital_Life_Design"&gt;Digital Life Design&lt;/a&gt; conference.&lt;/p&gt;&lt;br/&gt;&lt;/body&gt;&lt;br/&gt;&lt;/html&gt;
+</code></pre>
+
+<p>Find all the target links in the sample web page provided above. The 'target' links are the clickable links we are searching for on the web page. For each potential answer listed below, check the box if the choice corresponds to a target link in the sample page.</p>
+
+<ol>
+<li><p>x <code>http://www.w3.org/1999/xhtml</code></p></li>
+<li><p>Y  <code>http://www.wikipedia.org/wiki/Higher_education</code></p></li>
+<li><p>Y  <code>a href="http://www.wikipedia.org/wiki/Sebastian_Thrun</code></p></li>
+<li><p>x <code>both high quality and low cost</code></p></li>
+<li><p>Y  <code>http://www.wikipedia.org/wiki/Digital_Life_Design</code></p></li>
+</ol>
+
+<h2 id="question-2-python-programming-1">Question 2 - Python Programming 1</h2>
+
+<pre><code class="prettyprint"># Write Python code that prints out the number of hours in 7 weeks.
+</code></pre>
+
+<p>print 7 * 7 * 24</p>
+
+<h2 id="question-3-python-programming-2">Question 3 - Python Programming 2</h2>
+
+<h3 id="a-brief-lesson-on-multiple-assignments">A brief lesson on multiple assignments</h3>
+
+<p>If you are not familiar with multiple assignments like this:</p>
+
+<pre><code class="prettyprint">a, b = 0, 2
+</code></pre>
+
+<p>This is a short-cut used to assign multiple variables simultaneously. In this example a and b get the new values 0 and 2. The expressions on the right-hand side are all evaluated first before any of the assignments take place. The right-hand side expressions are evaluated from the left to the right.</p>
+
+<p>You can assign as many variables at once as you like in this way. Below is another example to demonstrate. If you want to test it in the Udacity interpreter, just remove the comment symbol in front of the print statements. You should get the same output as is shown after the &gt;&gt;&gt; symbols:</p>
+
+<pre><code class="prettyprint">Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday = 0, 1, 2, 3, 4, 5, 6
+
+#print Monday
+#&gt;&gt;&gt; 0
+
+#print Thursday
+#&gt;&gt;&gt; 3
+
+#print Sunday
+#&gt;&gt;&gt; 6
+</code></pre>
+
+<h3 id="the-question-is">The question is:</h3>
+
+<p>Which of the following sequences of statements leaves the variable x the same as it was before the statements. Assume that both a and x refer to integer values before this code.</p>
+
+<pre><code class="prettyprint">a = x 
+a = a + 1
+</code></pre>
+
+<p>-- x unchanged
+    a = x
+    x = a</p>
+
+<pre><code class="prettyprint">x = x + 1
+x = x
+
+a, x = x, a
+a, x = x, a
+
+z = x
+a = z
+x = a
+</code></pre>
+
+<h2 id="question-4-speed-of-light">Question 4 - Speed of Light</h2>
+
+<pre><code class="prettyprint"># Write Python code that stores the distance
+# in meters that light travels in one
+# nanosecond in the variable, nanodistance.
+
+# These variables are defined for you:
+
+speed_of_light = 299800000. # meters per second
+nano_per_sec = 1000000000. # 1 billion
+
+# After your code,running
+# print nanodistance
+# should output 0.2998
+
+ nanodistance = speed_of_light / no_per_sec
+# Note that nanodistance must be a decimal number.
+
+# ASSIGN nanodistance BELOW this line
+
+print nanodistance
+</code></pre>
+
+<h2 id="question-5-strings">Question 5 - Strings</h2>
+
+<p>Given any string s, which of the following always have the same value as s? (be careful, s could be an empty string.)</p>
+
+<pre><code class="prettyprint">('a' + s)[1:]   Y
+
+s[0] + s[1:] N
+
+s + ''  Y
+
+s[0:]  Y
+</code></pre>
+
+<h2 id="question-6-bodacious-udacity">Question 6 - Bodacious Udacity</h2>
+
+<pre><code class="prettyprint"># Given the variables s and t defined as:
+s = 'udacity'
+t = 'bodacious'
+# write Python code that prints out udacious
+# without using any quote characters in
+# your code.
+</code></pre>
+
+<p>print     s[0] + t [2:]</p>
+
+<h2 id="question-7-find-1">Question 7 - Find 1</h2>
+
+<pre><code class="prettyprint"># Assume text is a variable that
+# holds a string. Write Python code
+# that prints out the position
+# of the first occurrence of 'hoo'
+# in the value of text, or -1 if
+# it does not occur at all.
+
+text = "first hoo"
+
+
+# ENTER CODE BELOW HERE
+print text.find("hoo")
+</code></pre>
+
+<h2 id="question-8-find-2">Question 8 - Find 2</h2>
+
+<pre><code class="prettyprint"># Assume text is a variable that
+# holds a string. Write Python code
+# that prints out the position
+# of the second occurrence of 'zip'
+# in text, or -1 if it does not occur
+# at least twice.
+
+# For example,
+#text = 'all zip files are zipped'
+# &gt;&gt;&gt; 18
+# text = 'all zip files are compressed'
+# &gt;&gt;&gt; -1
+
+text = "all zip files are zipped"
+
+#ENTER CODE BELOW HERE
+
+print text.find('zip', text.find('zip') + 1)
+</code></pre>
+
+</div>
+
+
+
+<div id="wiki-footer">
+    <p id="pm">This 
+        page was last edited
+    on 2012/10/21 20:47:03.</p>
+</div>
+
+
+</div>
+
+            </div>
+        </div>
+        <div id="footer-pusher"></div>
+    </div>
+    <div id="footer">
+        
+
+<!-- <div class="clear"></div> -->
+<div id="bottom_bin">
+    <div class="width960">
+        <div class="left">
+            <p>Follow us on 
+                <a href="http://www.facebook.com/pages/Udacity/174179219354091?sk=wall" target="_blank">Facebook</a>, 
+                <a href="http://twitter.com/udacity" target="_blank">Twitter</a>, and 
+                <a href="https://plus.google.com/116286004036789369492/posts" target="_blank">Google Plus</a>
+            </p>
+            <p>&copy; 2012 Udacity, Inc.</p>    
+        </div>
+        <div class="right">
+			<p>
+			    <a href="/">Home</a>
+			    <a href="/udacity">About</a>
+			    <a href="http://blog.udacity.com/">Blog</a>
+			    <a href="/careers/">Jobs</a>
+			    <a href="/contact">Contact</a>
+			    <a href="/wiki/FAQ">FAQ</a>
+			    <a href="/legal/">Legal</a>
+			</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div><!-- end bottom_bin -->
+<!-- <div class="clear">&nbsp;</div> -->
+
+
+
+
+    </div>
+    
+
+    
+</body>
+</html>
+
+
+
+
+
+
